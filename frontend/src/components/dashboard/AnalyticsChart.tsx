@@ -8,7 +8,7 @@ import { format, parseISO } from 'date-fns'
 export default function AnalyticsChart() {
   const { data: trends, isLoading } = useQuery(
     'analyticsTrends',
-    () => fetchAnalyticsTrends(30)
+    () => fetchAnalyticsTrends()
   )
 
   const formatDate = (dateStr: string) => {
