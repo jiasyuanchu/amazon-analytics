@@ -6,14 +6,21 @@ from app.core.config import settings
 
 class AIService:
     def __init__(self):
-        self.openai_api_key = settings.OPENAI_API_KEY
-        self.anthropic_api_key = settings.ANTHROPIC_API_KEY
+        # Only consider valid API keys (not placeholder values)
+        self.openai_api_key = (
+            settings.OPENAI_API_KEY 
+            if settings.OPENAI_API_KEY and settings.OPENAI_API_KEY.strip() and not settings.OPENAI_API_KEY.startswith('your_')
+            else None
+        )
+        self.anthropic_api_key = (
+            settings.ANTHROPIC_API_KEY 
+            if settings.ANTHROPIC_API_KEY and settings.ANTHROPIC_API_KEY.strip() and not settings.ANTHROPIC_API_KEY.startswith('your_')
+            else None
+        )
 
     async def analyze_product(self, asin: str, analysis_type: str = "comprehensive") -> str:
         """Analyze a product using AI"""
         
-        # Mock analysis for demonstration
-        # In production, this would integrate with actual AI APIs
         prompt = self._get_analysis_prompt(asin, analysis_type)
         
         if self.openai_api_key:
@@ -21,7 +28,7 @@ class AIService:
         elif self.anthropic_api_key:
             return await self._call_anthropic(prompt)
         else:
-            return self._get_mock_analysis(asin, analysis_type)
+            return "AI analysis not available - please configure OpenAI or Anthropic API key"
 
     async def generate_insights(self, data: Dict[str, Any], insight_type: str = "trends") -> str:
         """Generate insights from analytics data"""
@@ -33,7 +40,7 @@ class AIService:
         elif self.anthropic_api_key:
             return await self._call_anthropic(prompt)
         else:
-            return self._get_mock_insights(data, insight_type)
+            return "AI insights not available - please configure OpenAI or Anthropic API key"
 
     def _get_analysis_prompt(self, asin: str, analysis_type: str) -> str:
         """Generate analysis prompt"""
@@ -57,31 +64,13 @@ class AIService:
 
     async def _call_openai(self, prompt: str) -> str:
         """Call OpenAI API"""
-        # Placeholder for OpenAI API integration
-        # In production, use the official OpenAI client
-        return f"OpenAI analysis based on: {prompt[:100]}..."
+        # TODO: Implement actual OpenAI API integration
+        # For now, return placeholder message
+        return "OpenAI integration not implemented yet. Please configure the actual OpenAI client."
 
     async def _call_anthropic(self, prompt: str) -> str:
         """Call Anthropic API"""
-        # Placeholder for Anthropic API integration
-        # In production, use the official Anthropic client
-        return f"Anthropic analysis based on: {prompt[:100]}..."
+        # TODO: Implement actual Anthropic API integration  
+        # For now, return placeholder message
+        return "Anthropic integration not implemented yet. Please configure the actual Anthropic client."
 
-    def _get_mock_analysis(self, asin: str, analysis_type: str) -> str:
-        """Return mock analysis for demonstration"""
-        analyses = {
-            "comprehensive": f"Product {asin} shows strong market performance with competitive pricing and positive customer sentiment. Recommendations include optimizing product description and expanding to related categories.",
-            "price": f"Product {asin} is competitively priced within its category. Consider dynamic pricing strategies during peak seasons.",
-            "reviews": f"Product {asin} maintains a 4.2/5 rating with customers praising quality but noting shipping concerns.",
-            "competition": f"Product {asin} faces moderate competition with 3-5 similar products in the same price range."
-        }
-        return analyses.get(analysis_type, analyses["comprehensive"])
-
-    def _get_mock_insights(self, data: Dict[str, Any], insight_type: str) -> str:
-        """Return mock insights for demonstration"""
-        insights = {
-            "trends": "Analytics show 15% growth in views over the past month with peak activity on weekends. Revenue trends indicate seasonal patterns with Q4 showing highest performance.",
-            "recommendations": "Based on current data, recommend increasing marketing spend during peak hours (6-9 PM) and optimizing product listings for mobile users who represent 65% of traffic.",
-            "predictions": "Current trends suggest 20% revenue growth potential in the next quarter. Key drivers include improved conversion rates and expanded product catalog."
-        }
-        return insights.get(insight_type, insights["trends"])

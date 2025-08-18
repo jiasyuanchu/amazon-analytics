@@ -25,6 +25,10 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: Optional[str] = None
     ANTHROPIC_API_KEY: Optional[str] = None
     
+    # Amazon APIs
+    RAINFOREST_API_KEY: Optional[str] = None
+    AMAZON_MARKETPLACE: str = "US"  # US, UK, DE, etc.
+    
     # Security
     SECRET_KEY: str = "your-secret-key-change-in-production"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30

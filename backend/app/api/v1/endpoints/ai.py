@@ -60,8 +60,8 @@ async def generate_insights(request: InsightRequest):
 @router.get("/health")
 async def ai_health_check():
     """Check AI service availability"""
-    has_openai = bool(settings.OPENAI_API_KEY)
-    has_anthropic = bool(settings.ANTHROPIC_API_KEY)
+    has_openai = bool(settings.OPENAI_API_KEY and settings.OPENAI_API_KEY.strip() and not settings.OPENAI_API_KEY.startswith('your_'))
+    has_anthropic = bool(settings.ANTHROPIC_API_KEY and settings.ANTHROPIC_API_KEY.strip() and not settings.ANTHROPIC_API_KEY.startswith('your_'))
     
     return {
         "openai_available": has_openai,

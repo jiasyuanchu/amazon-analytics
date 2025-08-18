@@ -142,3 +142,38 @@ export async function checkAIHealth(): Promise<{ openai_available: boolean; anth
   }
   return response.json();
 }
+
+// Amazon API functions
+export async function searchAmazonProducts(query: string): Promise<{ query: string; total_results: number; products: any[] }> {
+  const response = await fetch(`${API_BASE_URL}/api/v1/products/search/amazon?query=${encodeURIComponent(query)}`);
+  if (!response.ok) {
+    throw new Error('Failed to search Amazon products');
+  }
+  return response.json();
+}
+
+export async function syncProductFromAmazon(asin: string): Promise<Product> {
+  const response = await fetch(`${API_BASE_URL}/api/v1/products/sync/${asin}`, {
+    method: 'POST',
+  });
+  if (!response.ok) {
+    throw new Error('Failed to sync product from Amazon');
+  }
+  return response.json();
+}
+
+export async function getProductWithAmazonFallback(asin: string): Promise<Product> {
+  const response = await fetch(`${API_BASE_URL}/api/v1/products/${asin}/with-amazon-fallback`);
+  if (!response.ok) {
+    throw new Error('Failed to get product');
+  }
+  return response.json();
+}
+
+export async function getProductReviews(asin: string): Promise<{ total_reviews: number; average_rating: number; reviews: any[] }> {
+  const response = await fetch(`${API_BASE_URL}/api/v1/products/${asin}/reviews`);
+  if (!response.ok) {
+    throw new Error('Failed to get product reviews');
+  }
+  return response.json();
+}

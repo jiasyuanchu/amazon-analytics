@@ -45,6 +45,8 @@ services:
       - SECRET_KEY=dev-secret-key
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - RAINFOREST_API_KEY=${RAINFOREST_API_KEY}
+      - AMAZON_MARKETPLACE=${AMAZON_MARKETPLACE:-US}
     ports:
       - "8000:8000"
     depends_on:

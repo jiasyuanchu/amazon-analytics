@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import AmazonSearch from '@/components/amazon/AmazonSearch';
 
 interface AnalyticsData {
   total_products: number;
@@ -121,6 +122,9 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {/* Amazon Search */}
+      <AmazonSearch />
 
       {/* Products Table */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
